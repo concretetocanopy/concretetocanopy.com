@@ -477,8 +477,16 @@
 
 <!-- ── HERO ── -->
 <section id="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-image-note">[ Replace background with a stunning ravine photo ]</div>
+  <div class="hero-bg" id="heroBg">
+    <img
+      src="hero.jpg"
+      alt="A sunlit ravine trail in Toronto, lush green groundcover flanking a dirt path through bare-branched trees"
+      fetchpriority="high"
+      decoding="async"
+      id="heroImg"
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;z-index:1;opacity:0;transition:opacity 0.7s ease;"
+    />
+  </div>
   <div class="hero-content">
     <span class="hero-eyebrow">Toronto Walking Tours</span>
     <h1 class="hero-title">Below the<br>grid, <em>wild</em><br>Toronto</h1>
