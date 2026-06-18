@@ -55,7 +55,6 @@
       flex-shrink: 0;
     }
 
-    /* Desktop nav links */
     .nav-links {
       display: flex; gap: 2rem; list-style: none;
     }
@@ -79,7 +78,6 @@
       border-radius: 2px;
     }
 
-    /* Mobile hamburger */
     .nav-hamburger {
       display: none;
       flex-direction: column;
@@ -104,7 +102,6 @@
     .nav-hamburger.open span:nth-child(2) { opacity: 0; }
     .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    /* Mobile menu drawer */
     .mobile-menu {
       display: none;
       position: fixed;
@@ -222,7 +219,7 @@
     }
 
     .hero-cta {
-      display: inline-block;
+      display: inline-flex; align-items: center;
       background: var(--accent);
       color: #fff;
       text-decoration: none;
@@ -233,9 +230,10 @@
       font-weight: 500;
       border-radius: 2px;
       transition: background 0.2s, transform 0.15s;
-      /* Touch-friendly min size */
       min-height: 48px;
-      display: flex; align-items: center;
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
     }
 
     .hero-cta:hover { background: #b07440; transform: translateY(-1px); }
@@ -253,6 +251,9 @@
       border-radius: 2px;
       transition: border-color 0.2s, color 0.2s;
       min-height: 48px;
+      background: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
     }
 
     .hero-cta-ghost:hover { border-color: var(--fog); }
@@ -317,7 +318,6 @@
       display: flex;
       flex-direction: column;
       transition: transform 0.25s, box-shadow 0.25s;
-      /* Prevent tap highlight on mobile */
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -326,7 +326,6 @@
       box-shadow: 0 10px 32px rgba(26,46,28,0.1);
     }
 
-    /* Real tour images */
     .tour-img {
       width: 100%;
       height: 220px;
@@ -392,8 +391,9 @@
     }
 
     .btn-book {
-      display: block;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: var(--forest);
       color: var(--fog);
       text-decoration: none;
@@ -404,9 +404,11 @@
       font-weight: 500;
       border-radius: 2px;
       transition: background 0.2s;
-      /* Touch-friendly */
       min-height: 48px;
-      display: flex; align-items: center; justify-content: center;
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      width: 100%;
     }
 
     .btn-book:hover { background: var(--canopy); }
@@ -456,6 +458,7 @@
       border: none;
       cursor: pointer;
       min-height: 52px;
+      font-family: 'DM Sans', sans-serif;
     }
 
     .btn-stripe:hover { background: #b07440; transform: translateY(-1px); }
@@ -505,7 +508,7 @@
       border-radius: 2px;
       padding: 0.85rem 1rem;
       font-family: 'DM Sans', sans-serif;
-      font-size: 1rem; /* 16px min prevents iOS zoom */
+      font-size: 1rem;
       background: #fff;
       color: var(--grit);
       transition: border-color 0.2s;
@@ -561,16 +564,311 @@
       gap: 1rem 1.5rem;
     }
 
+    /* ── BOOKING MODAL ── */
+    .booking-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 46, 28, 0.75);
+      z-index: 200;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 5rem 1rem 2rem;
+      overflow-y: auto;
+    }
+
+    .booking-overlay.active { display: flex; }
+
+    .booking-modal {
+      background: var(--cream);
+      border-radius: 4px;
+      width: 100%;
+      max-width: 420px;
+      padding: 2rem 1.75rem;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .booking-close {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--concrete);
+      font-size: 1.4rem;
+      line-height: 1;
+      padding: 4px 6px;
+      border-radius: 2px;
+      transition: color 0.2s;
+    }
+
+    .booking-close:hover { color: var(--grit); }
+
+    .booking-tour-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--forest);
+      margin-bottom: 0.25rem;
+    }
+
+    .booking-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--moss);
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+
+    /* Calendar */
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .cal-nav {
+      background: none;
+      border: 1px solid rgba(74,103,65,0.25);
+      border-radius: 2px;
+      cursor: pointer;
+      color: var(--moss);
+      font-size: 1rem;
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+
+    .cal-nav:hover:not(:disabled) { background: rgba(74,103,65,0.1); }
+    .cal-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .cal-month-label {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--forest);
+      letter-spacing: 0.04em;
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      margin-bottom: 1.25rem;
+    }
+
+    .cal-dow {
+      text-align: center;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--concrete);
+      padding: 4px 0 6px;
+      font-weight: 500;
+    }
+
+    .cal-day {
+      text-align: center;
+      font-size: 0.82rem;
+      padding: 7px 0;
+      border-radius: 2px;
+      cursor: pointer;
+      color: var(--grit);
+      transition: background 0.1s;
+      border: 1px solid transparent;
+    }
+
+    .cal-day:hover:not(.cal-disabled):not(.cal-empty) {
+      background: rgba(74,103,65,0.1);
+    }
+
+    .cal-day.cal-selected {
+      background: var(--forest);
+      color: var(--fog);
+    }
+
+    .cal-day.cal-today {
+      border-color: var(--lichen);
+    }
+
+    .cal-day.cal-disabled {
+      color: var(--concrete);
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
+    .cal-day.cal-empty { cursor: default; }
+
+    /* Booking steps */
+    .book-step { display: none; }
+    .book-step.visible { display: block; }
+
+    .book-field { margin-bottom: 1rem; }
+
+    .book-field label {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--moss);
+      font-weight: 500;
+      margin-bottom: 0.4rem;
+    }
+
+    .book-field select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      border: 1px solid rgba(74,103,65,0.3);
+      border-radius: 2px;
+      background: #fff;
+      color: var(--grit);
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a6741' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.9rem center;
+    }
+
+    .book-field select:focus {
+      outline: none;
+      border-color: var(--moss);
+    }
+
+    /* Waiver */
+    .waiver-scroll {
+      background: #fff;
+      border: 1px solid rgba(74,103,65,0.2);
+      border-radius: 2px;
+      padding: 1rem;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 0.8rem;
+      line-height: 1.65;
+      color: #6b6460;
+      margin-bottom: 1rem;
+    }
+
+    .waiver-scroll h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      color: var(--forest);
+      margin-bottom: 0.6rem;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .waiver-scroll p { margin-bottom: 0.6rem; }
+
+    .waiver-scroll ul {
+      padding-left: 1.1rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .waiver-scroll ul li { margin-bottom: 0.25rem; }
+
+    /* Booking summary */
+    .booking-summary {
+      background: rgba(26,46,28,0.06);
+      border-left: 2px solid var(--lichen);
+      padding: 0.75rem 1rem;
+      border-radius: 0 2px 2px 0;
+      margin-bottom: 1rem;
+      font-size: 0.83rem;
+      line-height: 1.7;
+      color: var(--grit);
+    }
+
+    .booking-summary strong { color: var(--forest); font-weight: 500; }
+
+    .booking-total {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--forest);
+      margin-top: 0.35rem;
+    }
+
+    /* Accept checkbox */
+    .accept-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .accept-row input[type="checkbox"] {
+      width: 17px; height: 17px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      accent-color: var(--forest);
+      cursor: pointer;
+    }
+
+    .accept-row label {
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: var(--grit);
+      cursor: pointer;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.6rem;
+    }
+
+    .btn-modal-cancel {
+      flex: 1;
+      background: none;
+      border: 1px solid rgba(74,103,65,0.3);
+      color: var(--concrete);
+      padding: 0.85rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 500;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .btn-modal-cancel:hover { background: rgba(74,103,65,0.08); color: var(--grit); }
+
+    .btn-modal-pay {
+      flex: 2;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.85rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-modal-pay:hover:not(:disabled) { background: #b07440; transform: translateY(-1px); }
+    .btn-modal-pay:disabled {
+      background: var(--concrete);
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
     /* ── DESKTOP OVERRIDES ── */
     @media (min-width: 720px) {
       nav { padding: 1.2rem 2.5rem; }
-
       .nav-links { display: flex; }
       .nav-hamburger { display: none; }
       .mobile-menu { display: none !important; }
 
       #hero { padding: 0 2.5rem 5rem; }
-
       #tours { padding: 7rem 2.5rem; }
 
       .tours-grid {
@@ -603,6 +901,16 @@
         padding: 2.5rem;
       }
     }
+
+    @media (min-width: 480px) {
+      .nav-hamburger { display: none; }
+      .nav-links { display: flex; }
+    }
+
+    @media (max-width: 479px) {
+      .nav-hamburger { display: flex; }
+      .nav-links { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -610,16 +918,12 @@
 <!-- ── NAV ── -->
 <nav>
   <a class="nav-logo" href="#hero">Concrete to Canopy</a>
-
-  <!-- Desktop links -->
   <ul class="nav-links">
     <li><a href="#tours">Tours</a></li>
     <li><a href="#book">Book</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#book" class="nav-cta">Book Now</a></li>
+    <li><a href="#book" class="nav-cta" onclick="openBooking(event,'Any Tour')">Book Now</a></li>
   </ul>
-
-  <!-- Mobile hamburger -->
   <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false" id="hamburger">
     <span></span><span></span><span></span>
   </button>
@@ -630,7 +934,7 @@
   <a href="#tours" class="mobile-link">Tours</a>
   <a href="#book" class="mobile-link">Book</a>
   <a href="#contact" class="mobile-link">Contact</a>
-  <a href="#book" class="mobile-book mobile-link">Book Now</a>
+  <a href="#" class="mobile-book mobile-link" onclick="openBooking(event,'Any Tour')">Book Now</a>
 </div>
 
 <!-- ── HERO ── -->
@@ -652,7 +956,7 @@
     </p>
     <div class="hero-actions">
       <a href="#tours" class="hero-cta">See Our Tours</a>
-      <a href="#book" class="hero-cta-ghost">Book Now</a>
+      <button class="hero-cta-ghost" onclick="openBooking(event,'Any Tour')">Book Now</button>
     </div>
   </div>
   <div class="scroll-indicator">
@@ -674,7 +978,6 @@
 
   <div class="tours-grid">
 
-    <!-- Tour 1 — Brickworks -->
     <article class="tour-card">
       <img class="tour-img" src="Brickworks.jpg" alt="Evergreen Brickworks ravine trail tour" loading="lazy" />
       <div class="tour-body">
@@ -687,11 +990,10 @@
           <span>👥 Max X people</span>
         </div>
         <p class="tour-price">$50.00 <span>per person</span></p>
-        <a href="https://buy.stripe.com/5kQfZg92c3f054d4UCgMw00" class="btn-book" target="_blank" rel="noopener">Book This Tour</a>
+        <button class="btn-book" onclick="openBooking(event,'Tour Name One')">Book This Tour</button>
       </div>
     </article>
 
-    <!-- Tour 2 — St. Clair -->
     <article class="tour-card">
       <img class="tour-img" src="Stclair.jpg" alt="St. Clair ravine walking tour" loading="lazy" />
       <div class="tour-body">
@@ -704,11 +1006,10 @@
           <span>👥 Max X people</span>
         </div>
         <p class="tour-price">$50.00 <span>per person</span></p>
-        <a href="STRIPE_LINK_TOUR_2" class="btn-book" target="_blank" rel="noopener">Book This Tour</a>
+        <button class="btn-book" onclick="openBooking(event,'Tour Name Two')">Book This Tour</button>
       </div>
     </article>
 
-    <!-- Tour 3 — Eglinton North -->
     <article class="tour-card">
       <img class="tour-img" src="Eglinton North.jpg" alt="Eglinton North urban nature tour" loading="lazy" />
       <div class="tour-body">
@@ -721,11 +1022,10 @@
           <span>👥 Max X people</span>
         </div>
         <p class="tour-price">$50.00 <span>per person</span></p>
-        <a href="STRIPE_LINK_TOUR_3" class="btn-book" target="_blank" rel="noopener">Book This Tour</a>
+        <button class="btn-book" onclick="openBooking(event,'Tour Name Three')">Book This Tour</button>
       </div>
     </article>
 
-    <!-- Tour 4 — Eglinton South -->
     <article class="tour-card">
       <img class="tour-img" src="Eglinton South.jpg" alt="Eglinton South forest walking tour" loading="lazy" />
       <div class="tour-body">
@@ -738,7 +1038,7 @@
           <span>👥 Max X people</span>
         </div>
         <p class="tour-price">$50.00 <span>per person</span></p>
-        <a href="STRIPE_LINK_TOUR_4" class="btn-book" target="_blank" rel="noopener">Book This Tour</a>
+        <button class="btn-book" onclick="openBooking(event,'Tour Name Four')">Book This Tour</button>
       </div>
     </article>
 
@@ -752,10 +1052,10 @@
   <p>Choose your tour below and complete your booking securely through Stripe. Small groups mean an intimate, personal experience every time.</p>
 
   <div class="book-grid">
-    <a href="https://buy.stripe.com/5kQfZg92c3f054d4UCgMw00" class="btn-stripe" target="_blank" rel="noopener">Book — Tour Name One</a>
-    <a href="STRIPE_LINK_TOUR_2" class="btn-stripe" target="_blank" rel="noopener">Book — Tour Name Two</a>
-    <a href="STRIPE_LINK_TOUR_3" class="btn-stripe" target="_blank" rel="noopener">Book — Tour Name Four</a>
-    <a href="STRIPE_LINK_TOUR_4" class="btn-stripe" target="_blank" rel="noopener">Book — Tour Name Four</a>
+    <button class="btn-stripe" onclick="openBooking(event,'Tour Name One')">Book — Tour Name One</button>
+    <button class="btn-stripe" onclick="openBooking(event,'Tour Name Two')">Book — Tour Name Two</button>
+    <button class="btn-stripe" onclick="openBooking(event,'Tour Name Three')">Book — Tour Name Three</button>
+    <button class="btn-stripe" onclick="openBooking(event,'Tour Name Four')">Book — Tour Name Four</button>
   </div>
 
   <p class="stripe-note">🔒 Secure payment via Stripe · Full details sent by email after booking</p>
@@ -797,7 +1097,97 @@
   </div>
 </footer>
 
+<!-- ── BOOKING MODAL ── -->
+<div class="booking-overlay" id="bookingOverlay" role="dialog" aria-modal="true" aria-label="Book a tour">
+  <div class="booking-modal" id="bookingModal">
+    <button class="booking-close" id="bookingClose" aria-label="Close booking">&#215;</button>
+
+    <span class="booking-eyebrow">Book your walk</span>
+    <h2 class="booking-tour-name" id="modalTourName">Tour Name</h2>
+
+    <!-- Step 1: Calendar -->
+    <div class="book-step visible" id="stepCal">
+      <div class="cal-header">
+        <button class="cal-nav" id="calPrev" aria-label="Previous month">&#8249;</button>
+        <span class="cal-month-label" id="calMonthLabel"></span>
+        <button class="cal-nav" id="calNext" aria-label="Next month">&#8250;</button>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+
+    <!-- Step 2: Time -->
+    <div class="book-step" id="stepTime">
+      <div class="book-field">
+        <label for="timeSelect">Select a time</label>
+        <select id="timeSelect" onchange="onTimeChange()">
+          <option value="">— choose a time —</option>
+          <option value="9:00 AM">9:00 AM</option>
+          <option value="12:00 PM">12:00 PM</option>
+          <option value="3:00 PM">3:00 PM</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Step 3: Tickets -->
+    <div class="book-step" id="stepTickets">
+      <div class="book-field">
+        <label for="ticketSelect">Number of tickets</label>
+        <select id="ticketSelect" onchange="onTicketsChange()">
+          <option value="">— choose tickets —</option>
+          <option value="1">1 ticket — $50.00</option>
+          <option value="2">2 tickets — $100.00</option>
+          <option value="3">3 tickets — $150.00</option>
+          <option value="4">4 tickets — $200.00</option>
+          <option value="5">5 tickets — $250.00</option>
+          <option value="6">6 tickets — $300.00</option>
+          <option value="7">7 tickets — $350.00</option>
+          <option value="8">8 tickets — $400.00</option>
+          <option value="9">9 tickets — $450.00</option>
+          <option value="10">10 tickets — $500.00</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Step 4: Waiver + payment -->
+    <div class="book-step" id="stepWaiver">
+      <div class="waiver-scroll">
+        <h4>Guided Toronto Ravine Walk – Assumption of Risk and Release of Liability</h4>
+        <p>I acknowledge that I am voluntarily participating in a guided walking tour through Toronto ravines, trails, parks, and other public lands.</p>
+        <p>I understand that outdoor walking and hiking activities involve inherent risks, including but not limited to:</p>
+        <ul>
+          <li>Uneven, rocky, muddy, gravel, paved, or slippery surfaces</li>
+          <li>Falls, slips, trips, and collisions</li>
+          <li>Tree roots, branches, erosion, and natural obstacles</li>
+          <li>Exposure to insects, plants, wildlife, and allergens</li>
+          <li>Weather conditions including heat, cold, rain, wind, snow, and ice</li>
+          <li>Physical exertion, fatigue, dehydration, and medical emergencies</li>
+          <li>Hazards associated with public parks, trails, roads, and shared-use pathways</li>
+        </ul>
+        <p>I confirm that I am physically capable of participating and will exercise reasonable care for my own safety.</p>
+        <p>I understand that the guide is providing information and route guidance only and that participants remain responsible for their own actions, decisions, equipment, and personal safety.</p>
+        <p>I acknowledge that the trails and pathways used during the tour are public lands that are not owned, operated, maintained, or controlled by the guide.</p>
+        <p>To the fullest extent permitted by law, I voluntarily assume all risks associated with participation and release and discharge the guide, business, employees, volunteers, and representatives from claims arising from injury, illness, property damage, loss, or death occurring during participation, except where prohibited by law.</p>
+        <p>I agree to follow all safety instructions provided by the guide and understand that failure to do so may result in my removal from the tour without refund.</p>
+      </div>
+
+      <div class="booking-summary" id="bookingSummary"></div>
+
+      <div class="accept-row">
+        <input type="checkbox" id="acceptCheck" onchange="onAcceptChange()" />
+        <label for="acceptCheck">I have read and agree to the assumption of risk and release of liability above.</label>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" onclick="closeBooking()">Cancel</button>
+        <button class="btn-modal-pay" id="payBtn" disabled onclick="proceedToPayment()">Proceed to payment</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <script>
+  /* ── NAV HAMBURGER ── */
   const hamburger = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');
   const mobileLinks = mobileMenu.querySelectorAll('.mobile-link');
@@ -814,15 +1204,196 @@
     hamburger.setAttribute('aria-expanded', String(isOpen));
   });
 
-  // Close on link tap
   mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
 
-  // Close on outside tap
   document.addEventListener('click', (e) => {
-    if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
-      closeMenu();
-    }
+    if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) closeMenu();
   });
+
+  /* ── BOOKING MODAL ── */
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DOWS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const MAX_DATE = new Date(2026, 9, 31); // Oct 31 2026
+  const PRICE_PER = 50;
+  const STRIPE_PRODUCT = 'prod_UinWkshHnZa07a';
+
+  let today = new Date(); today.setHours(0,0,0,0);
+  let viewYear, viewMonth, selDate, selTime, selTickets, currentTour;
+
+  function resetModal() {
+    viewYear = today.getFullYear();
+    viewMonth = today.getMonth();
+    selDate = null; selTime = null; selTickets = null;
+    document.getElementById('timeSelect').value = '';
+    document.getElementById('ticketSelect').value = '';
+    document.getElementById('acceptCheck').checked = false;
+    document.getElementById('payBtn').disabled = true;
+    showStep('stepCal');
+    document.getElementById('stepTime').classList.remove('visible');
+    document.getElementById('stepTickets').classList.remove('visible');
+    document.getElementById('stepWaiver').classList.remove('visible');
+  }
+
+  function showStep(id) {
+    document.getElementById(id).classList.add('visible');
+  }
+
+  function openBooking(e, tourName) {
+    if (e) e.preventDefault();
+    currentTour = tourName;
+    document.getElementById('modalTourName').textContent = tourName;
+    resetModal();
+    renderCalendar();
+    document.getElementById('bookingOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeBooking() {
+    document.getElementById('bookingOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('bookingClose').addEventListener('click', closeBooking);
+  document.getElementById('bookingOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeBooking();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeBooking();
+  });
+
+  /* ── CALENDAR ── */
+  function renderCalendar() {
+    document.getElementById('calMonthLabel').textContent = MONTHS[viewMonth] + ' ' + viewYear;
+
+    const curStart = new Date(viewYear, viewMonth, 1);
+    const todayMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+    const maxMonthStart = new Date(2026, 9, 1);
+
+    const prevBtn = document.getElementById('calPrev');
+    const nextBtn = document.getElementById('calNext');
+    prevBtn.disabled = curStart <= todayMonthStart;
+    nextBtn.disabled = curStart >= maxMonthStart;
+
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+
+    DOWS.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'cal-dow';
+      el.textContent = d;
+      grid.appendChild(el);
+    });
+
+    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    for (let i = 0; i < firstDay; i++) {
+      const blank = document.createElement('div');
+      blank.className = 'cal-day cal-empty';
+      grid.appendChild(blank);
+    }
+
+    const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+    for (let d = 1; d <= daysInMonth; d++) {
+      const el = document.createElement('div');
+      el.className = 'cal-day';
+      el.textContent = d;
+      const thisDate = new Date(viewYear, viewMonth, d);
+      const isPast = thisDate < today;
+      const isAfterMax = thisDate > MAX_DATE;
+
+      if (isPast || isAfterMax) {
+        el.classList.add('cal-disabled');
+      } else {
+        if (thisDate.getTime() === today.getTime()) el.classList.add('cal-today');
+        if (selDate && thisDate.getTime() === selDate.getTime()) el.classList.add('cal-selected');
+        el.addEventListener('click', (function(dt) {
+          return function() { selectDate(dt); };
+        })(thisDate));
+      }
+      grid.appendChild(el);
+    }
+  }
+
+  document.getElementById('calPrev').addEventListener('click', function() {
+    if (viewMonth === 0) { viewMonth = 11; viewYear--; } else { viewMonth--; }
+    renderCalendar();
+  });
+
+  document.getElementById('calNext').addEventListener('click', function() {
+    if (viewMonth === 11) { viewMonth = 0; viewYear++; } else { viewMonth++; }
+    renderCalendar();
+  });
+
+  function selectDate(dt) {
+    selDate = dt;
+    selTime = null; selTickets = null;
+    document.getElementById('timeSelect').value = '';
+    document.getElementById('ticketSelect').value = '';
+    document.getElementById('acceptCheck').checked = false;
+    document.getElementById('payBtn').disabled = true;
+    renderCalendar();
+    document.getElementById('stepTime').classList.add('visible');
+    document.getElementById('stepTickets').classList.remove('visible');
+    document.getElementById('stepWaiver').classList.remove('visible');
+    document.getElementById('stepTime').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function onTimeChange() {
+    const v = document.getElementById('timeSelect').value;
+    selTime = v || null;
+    selTickets = null;
+    document.getElementById('ticketSelect').value = '';
+    document.getElementById('acceptCheck').checked = false;
+    document.getElementById('payBtn').disabled = true;
+    if (selTime) {
+      document.getElementById('stepTickets').classList.add('visible');
+      document.getElementById('stepWaiver').classList.remove('visible');
+    } else {
+      document.getElementById('stepTickets').classList.remove('visible');
+      document.getElementById('stepWaiver').classList.remove('visible');
+    }
+  }
+
+  function onTicketsChange() {
+    const v = document.getElementById('ticketSelect').value;
+    selTickets = v ? parseInt(v) : null;
+    document.getElementById('acceptCheck').checked = false;
+    document.getElementById('payBtn').disabled = true;
+    if (selTickets) {
+      const total = (selTickets * PRICE_PER).toFixed(2);
+      const dateStr = selDate.toLocaleDateString('en-CA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById('bookingSummary').innerHTML =
+        '<strong>' + currentTour + '</strong><br>' +
+        'Date: ' + dateStr + '<br>' +
+        'Time: ' + selTime + '<br>' +
+        'Tickets: ' + selTickets + '<br>' +
+        '<span class="booking-total">Total: $' + total + ' CAD</span>';
+      document.getElementById('stepWaiver').classList.add('visible');
+      document.getElementById('stepWaiver').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      document.getElementById('stepWaiver').classList.remove('visible');
+    }
+  }
+
+  function onAcceptChange() {
+    document.getElementById('payBtn').disabled = !document.getElementById('acceptCheck').checked;
+  }
+
+  function proceedToPayment() {
+    /* Replace this with your Stripe Checkout session creation.
+       Product ID: prod_UinWkshHnZa07a
+       Pass quantity = selTickets, metadata: tour, date, time */
+    const total = (selTickets * PRICE_PER).toFixed(2);
+    const dateStr = selDate.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
+    alert(
+      'Proceeding to Stripe payment\n\n' +
+      'Tour: ' + currentTour + '\n' +
+      'Date: ' + dateStr + '\n' +
+      'Time: ' + selTime + '\n' +
+      'Tickets: ' + selTickets + '\n' +
+      'Total: $' + total + ' CAD\n\n' +
+      'Product: ' + STRIPE_PRODUCT
+    );
+  }
 </script>
 
 </body>
