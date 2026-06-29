@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Concrete to Canopy — Toronto's Hidden Wilderness</title>
+  <meta name="description" content="Below the grid, Toronto's hidden wilderness. Step below the city and experience Toronto's secret ravines, forests and creeks." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --forest: #1a2e1c;
+      --canopy: #2d4a2f;
+      --moss: #4a6741;
+      --lichen: #7a9b6e;
+      --fog:   #e8ede4;
+      --concrete: #b0a99a;
+      --grit:  #3a3530;
+      --cream: #f5f2ec;
+      --accent: #c4874a;
+      --water: #3d6b7a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--grit);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.25rem;
+      background: rgba(26, 46, 28, 0.96);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--fog);
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-img {
+      height: 36px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav-links {
+      display: flex; gap: 2rem; list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--concrete);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--fog); }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--fog);
+      border-radius: 2px;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 56px; left: 0; right: 0;
+      background: rgba(26, 46, 28, 0.98);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 99;
+      padding: 1.5rem 1.25rem 2rem;
+      flex-direction: column;
+      gap: 0;
+      transform: translateY(-8px);
+      opacity: 0;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .mobile-menu.open {
+      display: flex;
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .mobile-menu a {
+      color: var(--fog);
+      text-decoration: none;
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 500;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(122,155,110,0.15);
+      display: block;
+    }
+
+    .mobile-menu a:last-child { border-bottom: none; }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex; align-items: flex-end;
+      padding: 0 1.25rem 4rem;
+      background: var(--forest);
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      overflow: hidden;
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(26,46,28,0.2) 0%, rgba(26,46,28,0.85) 100%);
+      z-index: 2;
+    }
+
+    #heroImg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      z-index: 1;
+    }
+
+    .hero-content { position: relative; z-index: 3; max-width: 760px; }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--lichen);
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 10vw, 5.5rem);
+      line-height: 1.05;
+      color: var(--fog);
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--lichen);
+    }
+
+    .hero-desc {
+      font-size: 0.98rem;
+      line-height: 1.8;
+      color: var(--concrete);
+      max-width: 520px;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .hero-cta {
+      display: inline-flex; align-items: center;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      padding: 0.9rem 2rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.15s;
+      min-height: 48px;
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .hero-cta:hover { background: #b07440; transform: translateY(-1px); }
+
+    .scroll-indicator {
+      position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      color: var(--lichen); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+      animation: bob 2s ease-in-out infinite;
+      z-index: 3;
+    }
+
+    .scroll-indicator svg { width: 18px; }
+
+    @keyframes bob {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── TOURS ── */
+    #tours {
+      padding: 5rem 1.25rem;
+      background: var(--cream);
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--moss);
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      color: var(--forest);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-sub {
+      font-size: 0.95rem;
+      color: var(--concrete);
+      font-weight: 300;
+      max-width: 500px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .tours-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .tour-card {
+      border: 1px solid rgba(74, 103, 65, 0.2);
+      border-radius: 4px;
+      overflow: hidden;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s, box-shadow 0.25s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .tour-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 32px rgba(26,46,28,0.1);
+    }
+
+    .tour-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .tour-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+
+    .tour-tag {
+      display: inline-block;
+      font-size: 0.67rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--moss);
+      border: 1px solid var(--lichen);
+      padding: 0.2rem 0.55rem;
+      border-radius: 2px;
+      margin-bottom: 0.75rem;
+      width: fit-content;
+    }
+
+    .tour-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--forest);
+      margin-bottom: 0.5rem;
+      line-height: 1.25;
+    }
+
+    .tour-desc {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: #6b6460;
+      font-weight: 300;
+      flex: 1;
+      margin-bottom: 1rem;
+    }
+
+    .tour-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1rem;
+      font-size: 0.78rem;
+      color: var(--concrete);
+      margin-bottom: 1.25rem;
+    }
+
+    .tour-meta span { display: flex; align-items: center; gap: 0.3rem; }
+
+    .tour-price {
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--forest);
+      margin-bottom: 1rem;
+    }
+
+    .tour-price span {
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: var(--concrete);
+    }
+
+    .btn-book {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--forest);
+      color: var(--fog);
+      text-decoration: none;
+      padding: 0.85rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      border-radius: 2px;
+      transition: background 0.2s;
+      min-height: 48px;
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      width: 100%;
+    }
+
+    .btn-book:hover { background: var(--canopy); }
+    .btn-book:active { background: var(--canopy); transform: scale(0.99); }
+
+    /* ── CONTACT ── */
+    #contact {
+      padding: 5rem 1.25rem;
+      background: var(--cream);
+    }
+
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      max-width: 900px;
+    }
+
+    .contact-info p {
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: #6b6460;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-detail {
+      font-size: 0.85rem;
+      color: var(--grit);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-detail strong { font-weight: 500; color: var(--forest); }
+
+    .contact-form { display: flex; flex-direction: column; gap: 0.9rem; }
+
+    .contact-form input,
+    .contact-form textarea {
+      border: 1px solid rgba(74,103,65,0.25);
+      border-radius: 2px;
+      padding: 0.85rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      background: #fff;
+      color: var(--grit);
+      transition: border-color 0.2s;
+      outline: none;
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus { border-color: var(--moss); }
+
+    .contact-form textarea { resize: vertical; min-height: 120px; }
+
+    .contact-form button {
+      background: var(--forest);
+      color: var(--fog);
+      border: none;
+      padding: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 500;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.2s;
+      min-height: 52px;
+    }
+
+    .contact-form button:hover { background: var(--canopy); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--grit);
+      color: var(--concrete);
+      padding: 2rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    footer a { color: var(--concrete); text-decoration: none; }
+    footer a:hover { color: var(--fog); }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem 1.5rem;
+    }
+
+    /* ── DESKTOP OVERRIDES ── */
+    @media (min-width: 720px) {
+      nav { padding: 1.2rem 2.5rem; }
+      .nav-links { display: flex; }
+      .nav-hamburger { display: none; }
+      .mobile-menu { display: none !important; }
+
+      #hero { padding: 0 2.5rem 5rem; }
+      #tours { padding: 7rem 2.5rem; }
+
+      .tours-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .tour-img { height: 200px; }
+
+      #contact { padding: 6rem 2.5rem; }
+
+      .contact-inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+      }
+
+      footer {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+        padding: 2.5rem;
+      }
+    }
+
+    @media (min-width: 480px) {
+      .nav-hamburger { display: none; }
+      .nav-links { display: flex; }
+    }
+
+    @media (max-width: 479px) {
+      .nav-hamburger { display: flex; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a class="nav-brand" href="#hero">
+    <img src="Logo.jpg" alt="Concrete to Canopy logo" class="nav-logo-img" />
+    <span class="nav-logo">Concrete to Canopy</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#tours">Tours</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false" id="hamburger">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile drawer -->
+<div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
+  <a href="#tours" class="mobile-link">Tours</a>
+  <a href="#contact" class="mobile-link">Contact</a>
+</div>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-bg">
+    <img
+      id="heroImg"
+      src="hero.jpg"
+      alt="A sunlit ravine trail in Toronto, lush green groundcover flanking a dirt path through bare-branched trees"
+      fetchpriority="high"
+      decoding="async"
+    />
+  </div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">Toronto Walking Tours</span>
+    <h1 class="hero-title">Below the<br>grid, <em>wild</em><br>Toronto</h1>
+    <p class="hero-desc">
+      While the city rushes above, an untamed network of ravines, forests & creeks winds beneath the streets. Step below the grid and experience Toronto's secret wilderness.
+    </p>
+    <div class="hero-actions">
+      <a href="#tours" class="hero-cta">See Our Tours</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <svg viewBox="0 0 18 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1" y="1" width="16" height="22" rx="8" stroke="#7a9b6e" stroke-width="1.5"/>
+      <circle cx="9" cy="7" r="2" fill="#7a9b6e">
+        <animate attributeName="cy" values="7;15;7" dur="1.6s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+    Scroll
+  </div>
+</section>
+
+<!-- ── TOURS ── -->
+<section id="tours">
+  <p class="section-label">What we offer</p>
+  <h2 class="section-title">Our Tours</h2>
+  <p class="section-sub">Each route is hand-crafted to reveal a different face of Toronto's hidden landscape — from ancient creek beds to gritty urban edges.</p>
+
+  <div class="tours-grid">
+
+    <article class="tour-card">
+      <img class="tour-img" src="Brickworks.jpg" alt="Evergreen Brickworks ravine trail tour" loading="lazy" />
+      <div class="tour-body">
+        <span class="tour-tag">Ravine</span>
+        <h3 class="tour-name">Don Valley Brickworks</h3>
+        <p class="tour-desc">A short walk through the Rosedale neighbourhood descending 60 meters below street level for a 2 hour walk into the Don valley with a unique view of downtown Toronto. We will pass through the Brickworks historical site, leading to a spot for impressive unique views of the core after leaving the canopy of a mature forest. Defintiely worth the ascent to the look out. </p>
+        <div class="tour-meta">
+          <span>⏱ 2 hours</span>
+          <span>📍 Meeting point Outside Castle Frank Subway on Line 2</span>
+          <span>👥 Max 8 people</span>
+        </div>
+        <p class="tour-price">$50.00 <span>per person</span></p>
+        <a class="btn-book" href="#" data-stripe-product="prod_UinWkshHnZa07a">Book This Tour</a>
+      </div>
+    </article>
+
+    <article class="tour-card">
+      <img class="tour-img" src="Stclair.jpg" alt="Yellow Creek walking tour" loading="lazy" />
+      <div class="tour-body">
+        <span class="tour-tag">Ravine</span>
+        <h3 class="tour-name">Yellow Creek</h3>
+        <p class="tour-desc">A short walk through the Rosedale neighbourhood descending 60 meters below street level for a 2 hour walk under a deciduous forest canopy on mixed trail surfaces.</p>
+        <div class="tour-meta">
+          <span>⏱ 2 hours</span>
+          <span>📍 Meeting point  Outside Castle Frank Subway on Line 2</span>
+          <span>👥 Max 8 people</span>
+        </div>
+        <p class="tour-price">$50.00 <span>per person</span></p>
+        <a class="btn-book" href="#" data-stripe-product="prod_UmETfoaOcDsQ5F">Book This Tour</a>
+      </div>
+    </article>
+
+    <article class="tour-card">
+      <img class="tour-img" src="Eglinton North.jpg" alt="Eglinton North urban nature tour" loading="lazy" />
+      <div class="tour-body">
+        <span class="tour-tag">Ravine</span>
+        <h3 class="tour-name">West Don River</h3>
+        <p class="tour-desc">Descend below the LRT and busy streets for a guided 2 hour walk in an environmentally significant area of the West Don river valley with its rich biodiversity. </p>
+        <div class="tour-meta">
+          <span>⏱ 2 hours</span>
+          <span>📍 Meeting point Outside Sunnybrook Park Station on Line 5</span>
+          <span>👥 Max 8 people</span>
+        </div>
+        <p class="tour-price">$50.00 <span>per person</span></p>
+        <a class="btn-book" href="#" data-stripe-product="prod_UmEUF89WX3i75K">Book This Tour</a>
+      </div>
+    </article>
+
+    <article class="tour-card">
+      <img class="tour-img" src="Eglinton South.jpg" alt="Eglinton South forest walking tour" loading="lazy" />
+      <div class="tour-body">
+        <span class="tour-tag">Ravine</span>
+        <h3 class="tour-name">Wetland Forest Walk</h3>
+        <p class="tour-desc">Descend below the LRT and busy streets for a guided 2 hour walk through the wetland marshes, mature mixed forest and along the trails behind the old science centre.</p>
+        <div class="tour-meta">
+          <span>⏱ 2 hours</span>
+          <span>📍 Meeting point Outside Sunnybrook Park Station on Line 5</span>
+          <span>👥 Max 8 people</span>
+        </div>
+        <p class="tour-price">$50.00 <span>per person</span></p>
+        <a class="btn-book" href="#" data-stripe-product="prod_UnJtO3KxpcyRF5">Book This Tour</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <p class="section-label">Get in touch</p>
+  <h2 class="section-title" style="margin-bottom: 2rem;">Questions? We'd love to hear from you.</h2>
+
+  <div class="contact-inner">
+    <div class="contact-info">
+      <p>Whether you're curious about a specific route, booking a private group, or just want to know what to wear — we're happy to help.</p>
+      <p class="contact-detail"><strong>Email</strong><br>hello@concretetocanopy.com</p>
+      <p class="contact-detail"><strong>Based in</strong><br>Toronto, Ontario</p>
+      <p class="contact-detail"><strong>Tours run</strong><br>[Season / Days — e.g. May–October, Weekends]</p>
+    </div>
+
+    <form class="contact-form" action="FORM_ENDPOINT_PLACEHOLDER" method="POST">
+      <input type="text" name="name" placeholder="Your name" required autocomplete="name" />
+      <input type="email" name="email" placeholder="Email address" required autocomplete="email" />
+      <textarea name="message" placeholder="Your message or question…" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div>
+    <span style="font-family:'Playfair Display',serif; color: #e8ede4; font-size: 0.95rem;">Concrete to Canopy</span><br>
+    <span style="font-size: 0.75rem;">© 2025 Concrete to Canopy. All rights reserved.</span>
+  </div>
+  <div class="footer-links">
+    <a href="#tours">Tours</a>
+    <a href="#contact">Contact</a>
+    <a href="https://www.instagram.com/YOURHANDLE" target="_blank" rel="noopener">Instagram</a>
+  </div>
+</footer>
+
+<script>
+  /* ── NAV HAMBURGER ── */
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileLinks = mobileMenu.querySelectorAll('.mobile-link');
+
+  function closeMenu() {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+  document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) closeMenu();
+  });
+
+  /* ── STRIPE PAYMENT LINKS ──
+     Each tour's "Book This Tour" button redirects to its Stripe Payment Link below,
+     matched by Stripe product ID via the button's data-stripe-product attribute.
+  */
+  const STRIPE_LINKS = {
+    'prod_UinWkshHnZa07a': 'https://buy.stripe.com/cNi4gyceobLweEN2MugMw01', // Don Valley Brickworks
+    'prod_UmETfoaOcDsQ5F': 'https://buy.stripe.com/dRm5kCfqA9DocwF9aSgMw04', // Yellow Creek
+    'prod_UmEUF89WX3i75K': 'https://buy.stripe.com/28E6oG92c3f08gpcn4gMw03', // West Don River
+    'prod_UnJtO3KxpcyRF5': 'https://buy.stripe.com/3cI6oGdisaHs8gp86OgMw02'  // Wetland Forest Walk
+  };
+
+  document.querySelectorAll('.btn-book[data-stripe-product]').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      const productId = btn.getAttribute('data-stripe-product');
+      const link = STRIPE_LINKS[productId];
+      if (link) {
+        window.location.href = link;
+      } else {
+        e.preventDefault();
+        alert('Booking link not set up yet for this tour. Please add the Stripe Payment Link.');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
