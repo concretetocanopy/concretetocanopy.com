@@ -849,9 +849,66 @@
       color: var(--moss);
       padding: 1rem 0;
     }
+
+    /* ── BOOKING SUCCESS BANNER ── */
+    .booking-success-banner {
+      display: none;
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 300;
+      background: var(--forest);
+      color: var(--fog);
+      padding: 1rem 1.75rem;
+      border-radius: 4px;
+      box-shadow: 0 8px 32px rgba(26,46,28,0.25);
+      text-align: center;
+      max-width: 420px;
+      width: calc(100% - 2.5rem);
+      animation: slideDown 0.35s ease;
+    }
+
+    .booking-success-banner.visible { display: block; }
+
+    .booking-success-banner strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .booking-success-banner p {
+      font-size: 0.83rem;
+      color: var(--lichen);
+      margin: 0;
+    }
+
+    .booking-success-close {
+      position: absolute;
+      top: 0.6rem; right: 0.75rem;
+      background: none;
+      border: none;
+      color: var(--lichen);
+      font-size: 1.2rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateX(-50%) translateY(-12px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
   </style>
 </head>
 <body>
+
+<!-- ── BOOKING SUCCESS BANNER ── -->
+<div class="booking-success-banner" id="successBanner">
+  <button class="booking-success-close" onclick="document.getElementById('successBanner').classList.remove('visible'); history.replaceState(null,'',location.pathname);" aria-label="Close">&#215;</button>
+  <strong>🌿 Booking confirmed!</strong>
+  <p>Your spot is reserved. Check your email for a receipt and details.</p>
+</div>
 
 <!-- ── NAV ── -->
 <nav>
@@ -1264,6 +1321,29 @@
     return y + '-' + m + '-' + d;
   }
 
+  // Returns times from ALL_TIMES that are still bookable for the given date.
+  // For today, filters out any time that is less than 30 minutes away.
+  function getBookableTimesForDate(dt) {
+    const isToday = dt.getTime() === today.getTime();
+    if (!isToday) return ALL_TIMES.slice();
+
+    const now = new Date();
+    return ALL_TIMES.filter(function(t) {
+      // Parse "9:30 AM" / "12:30 PM" / "3:30 PM" into today's datetime
+      const parts = t.match(/^(\d+):(\d+)\s*(AM|PM)$/i);
+      if (!parts) return false;
+      let hours = parseInt(parts[1], 10);
+      const mins = parseInt(parts[2], 10);
+      const ampm = parts[3].toUpperCase();
+      if (ampm === 'PM' && hours !== 12) hours += 12;
+      if (ampm === 'AM' && hours === 12) hours = 0;
+      const tourTime = new Date(dt);
+      tourTime.setHours(hours, mins, 0, 0);
+      // Keep only if more than 30 minutes from now
+      return (tourTime - now) > 30 * 60 * 1000;
+    });
+  }
+
   async function selectDate(dt) {
     clearError();
     selDate = dt;
@@ -1284,6 +1364,16 @@
     timeSelect.innerHTML = '<option value="">Loading available times…</option>';
     loadingNote.textContent = '';
 
+    // Times still bookable based on time of day (30-min cutoff for today)
+    const bookableTimes = getBookableTimesForDate(dt);
+
+    if (bookableTimes.length === 0) {
+      timeSelect.innerHTML = '<option value="">— no times available —</option>';
+      loadingNote.textContent = 'All times for today have passed. Please choose another date.';
+      timeSelect.disabled = false;
+      return;
+    }
+
     try {
       const dateStr = formatDateForApi(dt);
       const resp = await fetch(API_BASE + '/api/check-availability?date=' + dateStr);
@@ -1291,7 +1381,7 @@
       const data = await resp.json();
 
       timeSelect.innerHTML = '<option value="">— choose a time —</option>';
-      ALL_TIMES.forEach(function(t) {
+      bookableTimes.forEach(function(t) {
         const opt = document.createElement('option');
         opt.value = t;
         const isTaken = data.taken && data.taken.includes(t);
@@ -1300,13 +1390,17 @@
         timeSelect.appendChild(opt);
       });
 
-      if (data.available && data.available.length === 0) {
-        loadingNote.textContent = 'All times are booked for this date. Please choose another date.';
+      // Check if all bookable times are also taken
+      const allTaken = bookableTimes.every(function(t) {
+        return data.taken && data.taken.includes(t);
+      });
+      if (allTaken) {
+        loadingNote.textContent = 'All available times are booked for this date. Please choose another date.';
       }
     } catch (err) {
       console.error(err);
       timeSelect.innerHTML = '<option value="">— choose a time —</option>';
-      ALL_TIMES.forEach(function(t) {
+      bookableTimes.forEach(function(t) {
         const opt = document.createElement('option');
         opt.value = t;
         opt.textContent = t;
@@ -1392,6 +1486,19 @@
       showError(err.message || 'Something went wrong starting checkout. Please try again.');
     }
   }
+  /* ── BOOKING SUCCESS BANNER ── */
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('booking') === 'success') {
+      document.getElementById('successBanner').classList.add('visible');
+      // Clean the URL so refreshing doesn't re-show the banner
+      history.replaceState(null, '', location.pathname);
+      // Auto-hide after 10 seconds
+      setTimeout(function() {
+        document.getElementById('successBanner').classList.remove('visible');
+      }, 10000);
+    }
+  })();
 </script>
 
 </body>
